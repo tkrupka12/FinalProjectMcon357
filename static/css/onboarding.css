@@ -1,0 +1,121 @@
+/* Onboarding Modal */
+.onboarding-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.3s ease;
+}
+
+.onboarding-modal.show {
+    display: flex;
+}
+
+.onboarding-modal-content {
+    background: var(--bg-secondary);
+    border-radius: 20px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-xl);
+    animation: slideUp 0.3s ease;
+    border: 2px solid var(--border-color);
+}
+
+.onboarding-modal-header {
+    padding: var(--spacing-xl);
+    border-bottom: 2px solid var(--border-color);
+    background: linear-gradient(135deg, var(--pink-100) 0%, var(--pink-50) 100%);
+    border-radius: 20px 20px 0 0;
+    position: relative;
+}
+
+.onboarding-modal-header h2 {
+    margin: 0;
+    color: var(--pink-700);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.onboarding-modal-header p {
+    margin: 5px 0 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.onboarding-modal-body {
+    padding: var(--spacing-xl);
+}
+
+.onboarding-field {
+    margin-bottom: var(--spacing-lg);
+}
+
+.onboarding-field label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.onboarding-field select {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 15px;
+    background: var(--bg-input);
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.onboarding-field select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px var(--accent-light);
+}
+
+.onboarding-actions {
+    margin-top: var(--spacing-xl);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.onboarding-submit-btn {
+    background: linear-gradient(135deg, var(--pink-600) 0%, var(--pink-500) 100%);
+    color: white;
+    border: none;
+    padding: var(--spacing-md) var(--spacing-2xl);
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-md);
+    width: 100%;
+}
+
+.onboarding-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    background: linear-gradient(135deg, var(--pink-700) 0%, var(--pink-600) 100%);
+}
+
+.onboarding-submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
+
