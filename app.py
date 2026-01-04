@@ -3,6 +3,7 @@ AI Teaching Assistant - Main Application Entry Point
 Following the Application Initialization Flow from the flow diagram
 """
 import logging
+import os
 
 from flask import Flask
 from flask_login import LoginManager

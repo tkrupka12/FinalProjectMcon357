@@ -160,7 +160,7 @@ def determine_follow_up_questions(data):
 
 def build_optional_additions(data):
     """
-    Build topic-specific optional additions that attach to the generated lesson plan
+    Build topic-specific optional additions that attach to the generated lesson plan.
     """
     try:
         grade = data.get('grade_level') or 'this grade'
@@ -174,8 +174,14 @@ def build_optional_additions(data):
             f"Add topic-specific practice for {topic} with an answer key",
             "Embed quick formative checks every 10–15 minutes",
             "Add differentiation moves for struggling and advanced students",
-            f"Create a concise exit ticket focused on {topic}"
+            f"Create a concise exit ticket focused on {topic}",
         ]
+
+        # Expand options based on context if needed later
+        return base_options
+    except Exception as e:
+        logger.error(f"Error building optional additions: {e}")
+        return []
 
 def grade_difficulty_requirements(grade_level):
     """
