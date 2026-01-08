@@ -85,50 +85,6 @@ KEYWORDS_WORKSHEET = ['worksheet', 'work sheet', 'activity sheet', 'exercises', 
 # Keywords that imply a multi-lesson unit plan
 KEYWORDS_UNIT_PLAN = ['unit', 'unit plan', 'unit planner', 'week plan', '2 week plan', 'multi-day', 'multi lesson', 'multi-lesson', 'sequence of lessons', 'series of lessons', 'scope and sequence']
 
-def correct_spelling(text):
-    """
-    Use AI to correct spelling errors in text while preserving the user's intent
-    """
-    if not text or not text.strip():
-        return text
-    
-    if not client:
-        return text
-    
-    try:
-        prompt = f"""
-        Correct any spelling errors in the following text. Return ONLY the corrected text, preserving the original meaning and intent.
-        If the text is already correct, return it unchanged.
-        Do NOT change proper nouns, technical terms, or names unless they are clearly misspelled.
-        Preserve capitalization style (if it's all lowercase, keep it lowercase; if it has capitals, maintain that style).
-        
-        Text to correct: "{text}"
-        
-        Return ONLY the corrected text, nothing else.
-        """
-        
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant that corrects spelling errors. Return only the corrected text."},
-                {"role": "user", "content": prompt}
-            ],
-            temperature=0,
-            timeout=15.0
-        )
-        
-        corrected = response.choices[0].message.content.strip()
-        # Remove quotes if AI wrapped it in quotes
-        if corrected.startswith('"') and corrected.endswith('"'):
-            corrected = corrected[1:-1]
-        elif corrected.startswith("'") and corrected.endswith("'"):
-            corrected = corrected[1:-1]
-        
-        return corrected
-    except Exception as e:
-        logger.warning(f"Error correcting spelling: {str(e)}, using original text")
-        return text
-
 def infer_subject_from_topic_ai(topic, full_message=""):
     """
     Use AI to infer the subject from a topic when subject is not explicitly provided.
@@ -214,15 +170,13 @@ def extract_information_from_message(message, current_state=None):
         IMPORTANT: If the user provides a Topic but no Subject, try to infer the Subject based on the topic.
         Common subjects: Math, Science, English Language Arts, Social Studies, Art, Music, Physical Education, Foreign Language.
         
-        IMPORTANT: For the 'topic' field, correct any spelling errors while preserving the user's intent and meaning.
-        For example, if the user says "medern europeon histry", return "modern European history" (corrected spelling).
-        If the user says "ading and subtractin numbers", return "adding and subtracting numbers" (corrected spelling).
-        Preserve the general capitalization style but fix spelling errors.
+        CRITICAL: For the 'topic' field, preserve the user's EXACT wording and capitalization. Do NOT auto-capitalize or change their spelling.
+        If the user says "ading and subtractin numbers", return topic as "ading and subtractin numbers" (preserve their exact text).
         
         Return ONLY a JSON object with these keys (value should be null if not found):
         - grade_level
         - subject (infer from topic if topic is provided and subject is not explicitly stated)
-        - topic (CORRECT spelling errors while preserving user's intent and meaning)
+        - topic (PRESERVE user's exact wording and capitalization - do not auto-capitalize)
         - duration
         - objectives
         - standards (e.g., CCSS.MATH.CONTENT.4.NF.B.3, TEKS 5.3A)
@@ -254,17 +208,7 @@ def extract_information_from_message(message, current_state=None):
             )
             
             content = response.choices[0].message.content
-            extracted_data = json.loads(content)
-            
-            # Additional spell correction for topic if it was extracted
-            if extracted_data.get('topic'):
-                original_topic = extracted_data['topic']
-                corrected_topic = correct_spelling(original_topic)
-                if corrected_topic != original_topic:
-                    logger.info(f"Corrected topic spelling: '{original_topic}' -> '{corrected_topic}'")
-                    extracted_data['topic'] = corrected_topic
-            
-            return extracted_data
+            return json.loads(content)
         except Exception as api_error:
             logger.error(f"OpenAI API error extracting information: {str(api_error)}")
             return {}

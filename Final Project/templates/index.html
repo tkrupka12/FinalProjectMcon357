@@ -103,10 +103,6 @@
                     <div class="message-content">
                         <p>Hello! I'm here to help you create engaging, effective lesson plans that will inspire your students.</p>
                         <p id="initialGradeMessage">Loading...</p>
-                        <p id="onboardingPrompt" style="display: none; margin-top: 15px; padding: 12px; background: var(--pink-50); border-left: 4px solid var(--pink-500); border-radius: 8px;">
-                            <strong style="color: var(--pink-700);">📝 To get started:</strong><br>
-                            Please <strong>set your grade level</strong> using the dropdown menu at the top of the page (next to your name).
-                        </p>
                     </div>
                 </div>
             </div>
@@ -167,23 +163,15 @@
         <div class="onboarding-modal-content" onclick="event.stopPropagation()">
             <div class="onboarding-modal-header">
                 <h2>Welcome to Lesson Plan Assistant! 🎉</h2>
-                <p><strong>Set Your Grade Level</strong> - Please complete this quick questionnaire to get started</p>
-                <p style="margin-top: 8px; font-size: 0.9rem; color: var(--text-secondary);">This helps us create lesson plans tailored to your students' needs.</p>
+                <p>Let's get to know you better to personalize your experience</p>
                 <button class="help-close-btn" onclick="hideOnboardingModal()" id="onboardingCloseBtn" style="display: none;">&times;</button>
             </div>
             <div class="onboarding-modal-body">
-                <div class="questionnaire-intro">
-                    <p class="required-note"><span class="required-asterisk">*</span> Required fields must be completed to continue</p>
-                </div>
                 <form id="onboardingForm">
-                    <div class="onboarding-field required-field">
-                        <label for="gradeLevel">
-                            <span class="question-number">1.</span>
-                            What grade level do you teach? 
-                            <span class="required-asterisk" title="This field is required">*</span>
-                        </label>
-                        <select id="gradeLevel" name="grade_level" required class="required-select">
-                            <option value="">-- Please select your grade level --</option>
+                    <div class="onboarding-field">
+                        <label for="gradeLevel">What grade level do you teach? *</label>
+                        <select id="gradeLevel" name="grade_level" required>
+                            <option value="">Select a grade level</option>
                             <option value="Pre-K">Pre-K</option>
                             <option value="Kindergarten">Kindergarten</option>
                             <option value="1st grade">1st grade</option>
@@ -202,16 +190,12 @@
                             <option value="Middle School (6-8)">Middle School (6-8)</option>
                             <option value="High School (9-12)">High School (9-12)</option>
                         </select>
-                        <span class="field-help-text">This information helps us create lesson plans tailored to your students' needs.</span>
                     </div>
                     
                     <div class="onboarding-field">
-                        <label for="teachingExperience">
-                            <span class="question-number">2.</span>
-                            How many years have you been teaching?
-                        </label>
+                        <label for="teachingExperience">How many years have you been teaching?</label>
                         <select id="teachingExperience" name="teaching_experience">
-                            <option value="">-- Select an option (optional) --</option>
+                            <option value="">Select an option</option>
                             <option value="First year">First year</option>
                             <option value="1-3 years">1-3 years</option>
                             <option value="4-10 years">4-10 years</option>
@@ -221,12 +205,9 @@
                     </div>
                     
                     <div class="onboarding-field">
-                        <label for="classSize">
-                            <span class="question-number">3.</span>
-                            What is your typical class size?
-                        </label>
+                        <label for="classSize">What is your typical class size?</label>
                         <select id="classSize" name="class_size">
-                            <option value="">-- Select an option (optional) --</option>
+                            <option value="">Select an option</option>
                             <option value="1-10 students">1-10 students</option>
                             <option value="11-20 students">11-20 students</option>
                             <option value="21-30 students">21-30 students</option>
@@ -236,12 +217,9 @@
                     </div>
                     
                     <div class="onboarding-field">
-                        <label for="teachingStyle">
-                            <span class="question-number">4.</span>
-                            What teaching style do you prefer?
-                        </label>
+                        <label for="teachingStyle">What teaching style do you prefer?</label>
                         <select id="teachingStyle" name="teaching_style">
-                            <option value="">-- Select an option (optional) --</option>
+                            <option value="">Select an option</option>
                             <option value="Traditional/Lecture-based">Traditional/Lecture-based</option>
                             <option value="Interactive/Hands-on">Interactive/Hands-on</option>
                             <option value="Project-based">Project-based</option>
@@ -252,11 +230,7 @@
                     </div>
                     
                     <div class="onboarding-actions">
-                        <button type="submit" class="onboarding-submit-btn" id="onboardingSubmitBtn">
-                            <span class="submit-btn-text">Complete Questionnaire</span>
-                            <span class="submit-btn-loader" style="display: none;">Saving...</span>
-                        </button>
-                        <p class="submit-help-text">You must complete the required field (grade level) to continue.</p>
+                        <button type="submit" class="onboarding-submit-btn">Get Started</button>
                     </div>
                 </form>
             </div>
@@ -803,28 +777,6 @@
             messageDiv.appendChild(avatar);
             messageDiv.appendChild(messageContent);
             chatMessages.appendChild(messageDiv);
-            
-            // Check if this message contains a worksheet and add export buttons
-            setTimeout(() => {
-                const worksheetContainer = messageContent.querySelector('.worksheet-container');
-                if (worksheetContainer && !isUser) {
-                    const convId = conversationState.conversationId || 'current';
-                    const worksheetId = 'worksheet-' + Date.now();
-                    worksheetContainer.id = worksheetId;
-                    
-                    // Create export buttons container
-                    const exportButtons = document.createElement('div');
-                    exportButtons.className = 'lesson-plan-actions';
-                    exportButtons.style.marginTop = '15px';
-                    exportButtons.innerHTML = `
-                        <button class="export-btn pdf" onclick="exportWorksheetPDF('${convId}', '${worksheetId}')">📄 Export PDF</button>
-                        <button class="export-btn word" onclick="exportWorksheetWord('${convId}', '${worksheetId}')">📝 Export Word</button>
-                        <button class="copy-btn" onclick="copyWorksheetToClipboard('${worksheetId}', this)">📋 Copy to Clipboard</button>
-                    `;
-                    messageContent.appendChild(exportButtons);
-                }
-            }, 100);
-            
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
@@ -1076,19 +1028,7 @@
             
             // Check if input is disabled (user hasn't completed onboarding)
             if (input.disabled) {
-                alert('Please set your grade level first! Use the grade dropdown at the top of the page (next to your name) to get started.');
-                // Try to show onboarding modal or scroll to grade dropdown
-                const gradeDropdown = document.getElementById('gradeLevelDropdown');
-                if (gradeDropdown) {
-                    gradeDropdown.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    // Highlight the dropdown
-                    gradeDropdown.style.boxShadow = '0 0 0 3px var(--pink-200)';
-                    setTimeout(() => {
-                        gradeDropdown.style.boxShadow = '';
-                    }, 3000);
-                } else {
-                    showOnboardingModal(true);
-                }
+                alert('Please complete onboarding before using the chat. Check the grade dropdown above.');
                 return;
             }
             
@@ -1126,12 +1066,8 @@
                     input.disabled = true;
                     document.getElementById('sendButton').disabled = true;
                     document.getElementById('voiceRecordBtn').disabled = true;
-                    input.placeholder = 'Set your grade level above (top right) to start chatting...';
-                    addMessage('⚠️ ' + (data.error || 'Please set your grade level first! Use the grade dropdown at the top of the page (next to your name) to get started.'), false);
-                    const onboardingPrompt = document.getElementById('onboardingPrompt');
-                    if (onboardingPrompt) {
-                        onboardingPrompt.style.display = 'block';
-                    }
+                    input.placeholder = 'Please complete onboarding to use chat...';
+                    addMessage('⚠️ ' + (data.error || 'Please complete onboarding before using the chat. Check the grade dropdown above to complete your profile.'), false);
                     // Show onboarding modal
                     showOnboardingModal();
                     return;
@@ -1312,126 +1248,6 @@
 
         function exportWord(conversationId) {
             window.open(`/api/export/word/${conversationId}`, '_blank');
-        }
-
-        // Worksheet Export Functions
-        function exportWorksheetPDF(conversationId, worksheetId) {
-            const worksheetElement = document.getElementById(worksheetId);
-            if (!worksheetElement) {
-                alert('Worksheet not found');
-                return;
-            }
-            
-            // Get the HTML content of the worksheet
-            const worksheetHTML = worksheetElement.outerHTML;
-            
-            // Send to backend for PDF generation
-            fetch('/api/export/worksheet/pdf', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    conversation_id: conversationId,
-                    worksheet_html: worksheetHTML
-                })
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.blob();
-                }
-                throw new Error('Failed to export worksheet');
-            })
-            .then(blob => {
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `worksheet_${conversationId}_${Date.now()}.pdf`;
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                document.body.removeChild(a);
-            })
-            .catch(error => {
-                console.error('Error exporting worksheet:', error);
-                alert('Failed to export worksheet. Please try again.');
-            });
-        }
-
-        function exportWorksheetWord(conversationId, worksheetId) {
-            const worksheetElement = document.getElementById(worksheetId);
-            if (!worksheetElement) {
-                alert('Worksheet not found');
-                return;
-            }
-            
-            // Get the HTML content of the worksheet
-            const worksheetHTML = worksheetElement.outerHTML;
-            
-            // Send to backend for Word generation
-            fetch('/api/export/worksheet/word', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    conversation_id: conversationId,
-                    worksheet_html: worksheetHTML
-                })
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.blob();
-                }
-                throw new Error('Failed to export worksheet');
-            })
-            .then(blob => {
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `worksheet_${conversationId}_${Date.now()}.docx`;
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                document.body.removeChild(a);
-            })
-            .catch(error => {
-                console.error('Error exporting worksheet:', error);
-                alert('Failed to export worksheet. Please try again.');
-            });
-        }
-
-        async function copyWorksheetToClipboard(worksheetId, button) {
-            try {
-                const worksheetElement = document.getElementById(worksheetId);
-                if (!worksheetElement) {
-                    showUserFriendlyError('Could not find the worksheet to copy.');
-                    return;
-                }
-                
-                // Extract text from HTML
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = worksheetElement.innerHTML;
-                const text = tempDiv.textContent || tempDiv.innerText;
-                
-                // Copy to clipboard
-                await navigator.clipboard.writeText(text);
-                
-                // Show success feedback
-                const originalText = button.innerHTML;
-                button.innerHTML = '✅ Copied!';
-                button.classList.add('copied');
-                showToast('Worksheet copied to clipboard!', 'success');
-                
-                // Reset button after 2 seconds
-                setTimeout(() => {
-                    button.innerHTML = originalText;
-                    button.classList.remove('copied');
-                }, 2000);
-            } catch (error) {
-                console.error('Error copying worksheet:', error);
-                showUserFriendlyError('Unable to copy to clipboard. Please try selecting and copying the text manually.');
-            }
         }
 
         async function copyLessonPlanToClipboard(planId, button) {
@@ -1804,32 +1620,15 @@
                     
                     // Disable submit button to prevent double submission
                     submitBtn.disabled = true;
-                    const submitBtnText = submitBtn.querySelector('.submit-btn-text');
-                    const submitBtnLoader = submitBtn.querySelector('.submit-btn-loader');
-                    if (submitBtnText) submitBtnText.style.display = 'none';
-                    if (submitBtnLoader) submitBtnLoader.style.display = 'inline-block';
+                    submitBtn.textContent = 'Saving...';
                     
                     const formData = new FormData(onboardingForm);
                     const gradeLevel = formData.get('grade_level');
                     
                     if (!gradeLevel) {
-                        alert('Please select a grade level. This is a required field.');
+                        alert('Please select a grade level.');
                         submitBtn.disabled = false;
-                        const submitBtnText = submitBtn.querySelector('.submit-btn-text');
-                        const submitBtnLoader = submitBtn.querySelector('.submit-btn-loader');
-                        if (submitBtnText) submitBtnText.style.display = 'inline-block';
-                        if (submitBtnLoader) submitBtnLoader.style.display = 'none';
-                        // Highlight the required field
-                        const gradeSelect = document.getElementById('gradeLevel');
-                        if (gradeSelect) {
-                            gradeSelect.focus();
-                            gradeSelect.style.borderColor = 'var(--pink-600)';
-                            gradeSelect.style.boxShadow = '0 0 0 3px var(--pink-200)';
-                            setTimeout(() => {
-                                gradeSelect.style.borderColor = '';
-                                gradeSelect.style.boxShadow = '';
-                            }, 3000);
-                        }
+                        submitBtn.textContent = 'Get Started';
                         return;
                     }
                     
@@ -1907,7 +1706,6 @@
                             const messageInput = document.getElementById('messageInput');
                             const sendButton = document.getElementById('sendButton');
                             const voiceRecordBtn = document.getElementById('voiceRecordBtn');
-                            const onboardingPrompt = document.getElementById('onboardingPrompt');
                             if (messageInput) {
                                 messageInput.disabled = false;
                                 messageInput.placeholder = 'Share your thoughts about your classroom...';
@@ -1917,9 +1715,6 @@
                             }
                             if (voiceRecordBtn) {
                                 voiceRecordBtn.disabled = false;
-                            }
-                            if (onboardingPrompt) {
-                                onboardingPrompt.style.display = 'none';
                             }
                             // Update conversation state if exists
                             if (conversationState) {
@@ -1935,27 +1730,18 @@
                             
                             // Re-enable submit button
                             submitBtn.disabled = false;
-                            const submitBtnText = submitBtn.querySelector('.submit-btn-text');
-                            const submitBtnLoader = submitBtn.querySelector('.submit-btn-loader');
-                            if (submitBtnText) submitBtnText.style.display = 'inline-block';
-                            if (submitBtnLoader) submitBtnLoader.style.display = 'none';
+                            submitBtn.textContent = 'Get Started';
                         } else {
                             console.error('Failed to save onboarding:', data.error);
                             alert('Failed to save your information: ' + (data.error || 'Please try again.'));
                             submitBtn.disabled = false;
-                            const submitBtnText = submitBtn.querySelector('.submit-btn-text');
-                            const submitBtnLoader = submitBtn.querySelector('.submit-btn-loader');
-                            if (submitBtnText) submitBtnText.style.display = 'inline-block';
-                            if (submitBtnLoader) submitBtnLoader.style.display = 'none';
+                            submitBtn.textContent = 'Get Started';
                         }
                     } catch (error) {
                         console.error('Error saving onboarding:', error);
                         alert('An error occurred: ' + error.message + '. Please check the console for details and try again.');
                         submitBtn.disabled = false;
-                        const submitBtnText = submitBtn.querySelector('.submit-btn-text');
-                        const submitBtnLoader = submitBtn.querySelector('.submit-btn-loader');
-                        if (submitBtnText) submitBtnText.style.display = 'inline-block';
-                        if (submitBtnLoader) submitBtnLoader.style.display = 'none';
+                        submitBtn.textContent = 'Get Started';
                     }
                 });
             }
@@ -2009,7 +1795,7 @@
                             // Disable chat interface
                             if (messageInput) {
                                 messageInput.disabled = true;
-                                messageInput.placeholder = 'Set your grade level above (top right) to start chatting...';
+                                messageInput.placeholder = 'Please complete onboarding to use chat...';
                             }
                             if (sendButton) {
                                 sendButton.disabled = true;
@@ -2021,12 +1807,8 @@
                             const chatMessages = document.getElementById('chatMessages');
                             if (chatMessages) {
                                 const initialMsg = document.getElementById('initialGradeMessage');
-                                const onboardingPrompt = document.getElementById('onboardingPrompt');
                                 if (initialMsg) {
-                                    initialMsg.innerHTML = '<strong style="color: var(--pink-700);">⚠️ Please set your grade level to start using the chat.</strong>';
-                                }
-                                if (onboardingPrompt) {
-                                    onboardingPrompt.style.display = 'block';
+                                    initialMsg.innerHTML = '<strong style="color: var(--pink-700);">⚠️ Please complete onboarding to use the chat.</strong><br>Complete the onboarding form above to get started.';
                                 }
                             }
                             // If onboarding modal is not already showing, show it automatically
@@ -2114,16 +1896,12 @@
                             // Disable chat input until onboarding is complete
                             const messageInput = document.getElementById('messageInput');
                             const sendButton = document.getElementById('sendButton');
-                            const onboardingPrompt = document.getElementById('onboardingPrompt');
                             if (messageInput) {
                                 messageInput.disabled = true;
-                                messageInput.placeholder = 'Set your grade level above (top right) to start chatting...';
+                                messageInput.placeholder = 'Please complete onboarding to use chat...';
                             }
                             if (sendButton) {
                                 sendButton.disabled = true;
-                            }
-                            if (onboardingPrompt) {
-                                onboardingPrompt.style.display = 'block';
                             }
                         } else if (data.success && !data.needs_onboarding) {
                             console.log('Onboarding already completed - user has grade level saved');
